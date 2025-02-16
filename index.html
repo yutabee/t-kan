@@ -67,7 +67,7 @@
             color: var(--text-primary);
         }
 
-        /* 新規追加用パネル */
+        /* 新規追加用パネル：フリー入力 */
         .new-account-panel {
             display: flex;
             gap: 1rem;
@@ -75,46 +75,45 @@
             margin-bottom: 1rem;
         }
 
-        /* 検索・フィルター用パネル */
-        .filter-panel {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .select-wrapper,
-        .filter-wrapper {
-            position: relative;
+        .new-account-panel input {
             flex: 1;
             min-width: 200px;
-        }
-
-        .select-wrapper::after,
-        .filter-wrapper::after {
-            content: "\f107";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--secondary-color);
-            pointer-events: none;
-        }
-
-        select {
-            width: 100%;
             padding: 0.75rem 1rem;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
             background-color: var(--card-background);
             color: var(--text-primary);
             font-size: 0.875rem;
-            appearance: none;
             transition: all 0.2s ease;
         }
 
-        select:focus {
+        .new-account-panel input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        /* 検索用パネル */
+        .filter-panel {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filter-panel input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-panel input:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px var(--accent-color);
@@ -144,28 +143,6 @@
 
         .btn i {
             font-size: 1rem;
-        }
-
-        .search-wrapper {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .search-wrapper input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--card-background);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .search-wrapper input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
         }
 
         .t-accounts-container {
@@ -286,9 +263,8 @@
                 flex-direction: column;
             }
 
-            .select-wrapper,
-            .filter-wrapper,
-            .search-wrapper {
+            .new-account-panel input,
+            .filter-panel input {
                 width: 100%;
             }
 
@@ -352,130 +328,16 @@
                 <i class="fas fa-book-open"></i>
                 <h1>T勘定メモアプリ</h1>
             </div>
-            <!-- 新規T勘定作成用パネル -->
+            <!-- 新規T勘定作成用パネル（フリー入力） -->
             <div class="new-account-panel">
-                <div class="select-wrapper">
-                    <select id="account-type">
-                        <option value="">勘定科目を選択してください</option>
-                        <option value="cash">現金</option>
-                        <option value="bank">当座預金</option>
-                        <option value="accounts-receivable">売掛金</option>
-                        <option value="notes-receivable">受取手形</option>
-                        <option value="inventory">商品</option>
-                        <option value="prepaid-expenses">前払費用</option>
-                        <option value="fixed-assets">固定資産</option>
-                        <option value="accumulated-depreciation">減価償却累計額</option>
-                        <option value="equipment">備品</option>
-                        <option value="accounts-payable">買掛金</option>
-                        <option value="notes-payable">支払手形</option>
-                        <option value="loans-payable">借入金</option>
-                        <option value="short-term-loans">短期借入金</option>
-                        <option value="long-term-debt">長期借入金</option>
-                        <option value="advance-receipts">前受金</option>
-                        <option value="accrued-liabilities">未払金</option>
-                        <option value="accrued-expenses">未払費用</option>
-                        <option value="sales">売上</option>
-                        <option value="sales-discount">売上割引</option>
-                        <option value="sales-return">売上戻り</option>
-                        <option value="purchases">仕入</option>
-                        <option value="purchase-discount">仕入割引</option>
-                        <option value="purchase-return">仕入戻し</option>
-                        <option value="wages">給与手当</option>
-                        <option value="employee-benefits">福利厚生費</option>
-                        <option value="advertising">広告宣伝費</option>
-                        <option value="utilities">水道光熱費</option>
-                        <option value="transportation">交通費</option>
-                        <option value="communication">通信費</option>
-                        <option value="travel-expense">旅費交通費</option>
-                        <option value="repairs">修繕費</option>
-                        <option value="depreciation-expense">減価償却費</option>
-                        <option value="taxes">租税公課</option>
-                        <option value="miscellaneous-expenses">雑費</option>
-                        <option value="other-income">雑収入</option>
-                        <option value="interest-receivable">受取利息</option>
-                        <option value="interest-expense">支払利息</option>
-                        <option value="securities">有価証券</option>
-                        <option value="loans-receivable">短期貸付金</option>
-                        <option value="advances">立替金</option>
-                        <option value="accrued-income">未収入金</option>
-                        <option value="consumption-tax-receivable">未収消費税</option>
-                        <option value="consumption-tax-payable">未払消費税</option>
-                        <option value="allowance-for-doubtful-accounts">貸倒引当金</option>
-                        <option value="impairment-loss">評価損</option>
-                        <option value="r&d-expense">研究開発費</option>
-                        <option value="membership-fees">諸会費</option>
-                        <option value="lease-expense">リース料</option>
-                        <option value="insurance-expense">保険料</option>
-                        <option value="entertainment-expense">交際費</option>
-                        <option value="meeting-expense">会議費</option>
-                    </select>
-                </div>
+                <input type="text" id="account-input" placeholder="勘定科目を入力してください" />
                 <button class="btn btn-primary" onclick="addTAccount()">
-                    <i class="fas fa-plus"></i>
-                    新規T勘定を追加
+                    <i class="fas fa-plus"></i> 新規T勘定を追加
                 </button>
             </div>
-            <!-- 検索・フィルター用パネル -->
+            <!-- 検索用パネル -->
             <div class="filter-panel">
-                <div class="search-wrapper">
-                    <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
-                </div>
-                <div class="filter-wrapper">
-                    <select id="filter-select" onchange="filterByAccountType(this.value)">
-                        <option value="">すべての勘定科目</option>
-                        <option value="cash">現金</option>
-                        <option value="bank">当座預金</option>
-                        <option value="accounts-receivable">売掛金</option>
-                        <option value="notes-receivable">受取手形</option>
-                        <option value="inventory">商品</option>
-                        <option value="prepaid-expenses">前払費用</option>
-                        <option value="fixed-assets">固定資産</option>
-                        <option value="accumulated-depreciation">減価償却累計額</option>
-                        <option value="equipment">備品</option>
-                        <option value="accounts-payable">買掛金</option>
-                        <option value="notes-payable">支払手形</option>
-                        <option value="loans-payable">借入金</option>
-                        <option value="short-term-loans">短期借入金</option>
-                        <option value="long-term-debt">長期借入金</option>
-                        <option value="advance-receipts">前受金</option>
-                        <option value="accrued-liabilities">未払金</option>
-                        <option value="accrued-expenses">未払費用</option>
-                        <option value="sales">売上</option>
-                        <option value="sales-discount">売上割引</option>
-                        <option value="sales-return">売上戻り</option>
-                        <option value="purchases">仕入</option>
-                        <option value="purchase-discount">仕入割引</option>
-                        <option value="purchase-return">仕入戻し</option>
-                        <option value="wages">給与手当</option>
-                        <option value="employee-benefits">福利厚生費</option>
-                        <option value="advertising">広告宣伝費</option>
-                        <option value="utilities">水道光熱費</option>
-                        <option value="transportation">交通費</option>
-                        <option value="communication">通信費</option>
-                        <option value="travel-expense">旅費交通費</option>
-                        <option value="repairs">修繕費</option>
-                        <option value="depreciation-expense">減価償却費</option>
-                        <option value="taxes">租税公課</option>
-                        <option value="miscellaneous-expenses">雑費</option>
-                        <option value="other-income">雑収入</option>
-                        <option value="interest-receivable">受取利息</option>
-                        <option value="interest-expense">支払利息</option>
-                        <option value="securities">有価証券</option>
-                        <option value="loans-receivable">短期貸付金</option>
-                        <option value="advances">立替金</option>
-                        <option value="accrued-income">未収入金</option>
-                        <option value="consumption-tax-receivable">未収消費税</option>
-                        <option value="consumption-tax-payable">未払消費税</option>
-                        <option value="allowance-for-doubtful-accounts">貸倒引当金</option>
-                        <option value="impairment-loss">評価損</option>
-                        <option value="r&d-expense">研究開発費</option>
-                        <option value="membership-fees">諸会費</option>
-                        <option value="lease-expense">リース料</option>
-                        <option value="insurance-expense">保険料</option>
-                        <option value="entertainment-expense">交際費</option>
-                        <option value="meeting-expense">会議費</option>
-                    </select>
-                </div>
+                <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
             </div>
         </header>
 
@@ -483,36 +345,33 @@
             <div class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
                 <p style="margin-top: 1rem">
-                    勘定科目を選択して新規T勘定を追加してください
+                    勘定科目を入力して新規T勘定を追加してください
                 </p>
             </div>
         </main>
     </div>
 
     <script>
+        // 新規T勘定追加（フリー入力の値を使用）
         function addTAccount() {
-            const select = document.getElementById('account-type');
-            const accountType = select.value;
-            const accountName = select.options[select.selectedIndex].text;
-
-            if (!accountType) {
-                showToast('警告', '勘定科目を選択してください', 'warning');
+            const input = document.getElementById('account-input');
+            const accountSubject = input.value.trim();
+            if (!accountSubject) {
+                showToast('警告', '勘定科目を入力してください', 'warning');
                 return;
             }
-
             const container = document.querySelector('.t-accounts-container');
             // 空の状態を削除
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) {
                 emptyState.remove();
             }
-
             const tAccountHTML = `
-        <div class="t-account fade-in" data-account-type="${accountType}">
+        <div class="t-account fade-in" data-account-type="${accountSubject}">
           <div class="t-account-header">
             <div class="t-account-title">
               <i class="fas fa-file-invoice-dollar"></i>
-              <span>${accountName}</span>
+              <span>${accountSubject}</span>
             </div>
             <div class="t-account-actions">
               <button class="action-btn" onclick="deleteTAccount(this)" title="削除">
@@ -523,47 +382,39 @@
           <div class="t-account-content">
             <div class="t-account-side">
               <div class="t-account-label">
-                <i class="fas fa-arrow-right"></i>
-                借方
+                <i class="fas fa-arrow-right"></i> 借方
               </div>
-              <textarea class="t-account-textarea"
-                placeholder="借方の記録をここに入力..."
-                oninput="autoSave(this)"></textarea>
+              <textarea class="t-account-textarea" placeholder="借方の記録をここに入力..." oninput="autoSave(this)"></textarea>
             </div>
             <div class="t-account-side">
               <div class="t-account-label">
-                <i class="fas fa-arrow-left"></i>
-                貸方
+                <i class="fas fa-arrow-left"></i> 貸方
               </div>
-              <textarea class="t-account-textarea"
-                placeholder="貸方の記録をここに入力..."
-                oninput="autoSave(this)"></textarea>
+              <textarea class="t-account-textarea" placeholder="貸方の記録をここに入力..." oninput="autoSave(this)"></textarea>
             </div>
           </div>
         </div>
       `;
-
             container.insertAdjacentHTML('beforeend', tAccountHTML);
-            select.value = '';
-
-            // LocalStorageにも保存（accountTypeも含む）
+            // 入力欄をクリア
+            input.value = '';
+            // LocalStorageにも保存（勘定科目は accountSubject として保存）
             const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
-            const existingIndex = savedAccounts.findIndex(acc => acc.title === accountName);
+            // ここではタイトルで重複チェック（必要に応じて変更可）
+            const existingIndex = savedAccounts.findIndex(acc => acc.title === accountSubject);
             const newTAccountData = {
-                title: accountName,
-                accountType: accountType,
+                title: accountSubject,
+                accountType: accountSubject,
                 debit: '',
                 credit: '',
                 timestamp: new Date().toISOString()
             };
-
             if (existingIndex !== -1) {
                 savedAccounts[existingIndex] = newTAccountData;
             } else {
                 savedAccounts.push(newTAccountData);
             }
             localStorage.setItem('tAccounts', JSON.stringify(savedAccounts));
-
             showToast('成功', '新しいT勘定を追加しました', 'success');
         }
 
@@ -573,7 +424,6 @@
             const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
             const newAccounts = savedAccounts.filter(acc => acc.title !== accountTitle);
             localStorage.setItem('tAccounts', JSON.stringify(newAccounts));
-
             tAccount.style.opacity = '0';
             tAccount.style.transform = 'scale(0.9)';
             setTimeout(() => {
@@ -583,9 +433,7 @@
                     container.innerHTML = `
             <div class="empty-state">
               <i class="fas fa-clipboard-list fa-3x"></i>
-              <p style="margin-top: 1rem;">
-                勘定科目を選択して新規T勘定を追加してください
-              </p>
+              <p style="margin-top: 1rem;">勘定科目を入力して新規T勘定を追加してください</p>
             </div>
           `;
                 }
@@ -605,12 +453,10 @@
                     credit: tAccount.querySelector('.t-account-side:last-child textarea').value,
                     timestamp: new Date().toISOString()
                 };
-                // accountTypeも保持
+                // 勘定科目は data-account-type 属性から取得
                 data.accountType = tAccount.getAttribute('data-account-type');
-
                 const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
                 const existingIndex = savedAccounts.findIndex(acc => acc.title === accountTitle);
-
                 if (existingIndex !== -1) {
                     savedAccounts[existingIndex] = data;
                 } else {
@@ -643,15 +489,13 @@
               <div class="t-account-content">
                 <div class="t-account-side">
                   <div class="t-account-label">
-                    <i class="fas fa-arrow-right"></i>
-                    借方
+                    <i class="fas fa-arrow-right"></i> 借方
                   </div>
                   <textarea class="t-account-textarea" oninput="autoSave(this)">${account.debit || ''}</textarea>
                 </div>
                 <div class="t-account-side">
                   <div class="t-account-label">
-                    <i class="fas fa-arrow-left"></i>
-                    貸方
+                    <i class="fas fa-arrow-left"></i> 貸方
                   </div>
                   <textarea class="t-account-textarea" oninput="autoSave(this)">${account.credit || ''}</textarea>
                 </div>
@@ -663,26 +507,13 @@
             }
         });
 
-        // テキスト検索（タイトル部分一致）
+        // テキスト検索：タイトルの部分一致
         function searchTAccounts(query) {
             query = query.toLowerCase();
             const accounts = document.querySelectorAll('.t-account');
             accounts.forEach(account => {
                 const title = account.querySelector('.t-account-title span').textContent.toLowerCase();
                 if (title.includes(query)) {
-                    account.style.display = '';
-                } else {
-                    account.style.display = 'none';
-                }
-            });
-        }
-
-        // 勘定科目フィルター：フィルターセレクトの値とdata-account-type属性が一致するもののみ表示
-        function filterByAccountType(filterValue) {
-            const accounts = document.querySelectorAll('.t-account');
-            accounts.forEach(account => {
-                const type = account.getAttribute('data-account-type');
-                if (!filterValue || type === filterValue) {
                     account.style.display = '';
                 } else {
                     account.style.display = 'none';
