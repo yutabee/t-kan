@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T勘定メモアプリ | Professional</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --accent-color: #eef2ff;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .header {
+            background-color: var(--card-background);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 新規追加用パネル */
+        .new-account-panel {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* 検索・フィルター用パネル */
+        .filter-panel {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .select-wrapper,
+        .filter-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .select-wrapper::after,
+        .filter-wrapper::after {
+            content: "\f107";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            pointer-events: none;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            appearance: none;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        .t-accounts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .t-account {
+            background-color: var(--card-background);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .t-account:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .t-account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .t-account-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .t-account-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        .t-account-content {
+            display: flex;
+            min-height: 250px;
+        }
+
+        .t-account-side {
+            flex: 1;
+            padding: 1rem;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .t-account-side:last-child {
+            border-right: none;
+        }
+
+        .t-account-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .t-account-textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            resize: none;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--card-background);
+            transition: all 0.2s ease;
+        }
+
+        .t-account-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .t-accounts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .new-account-panel,
+            .filter-panel {
+                flex-direction: column;
+            }
+
+            .select-wrapper,
+            .filter-wrapper,
+            .search-wrapper {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* アニメーション */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* トースト通知 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background-color: var(--card-background);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-title">
+                <i class="fas fa-book-open"></i>
+                <h1>T勘定メモアプリ</h1>
+            </div>
+            <!-- 新規T勘定作成用パネル -->
+            <div class="new-account-panel">
+                <div class="select-wrapper">
+                    <select id="account-type">
+                        <option value="">勘定科目を選択してください</option>
+                        <option value="cash">現金</option>
+                        <option value="bank">当座預金</option>
+                        <option value="accounts-receivable">売掛金</option>
+                        <option value="notes-receivable">受取手形</option>
+                        <option value="inventory">商品</option>
+                        <option value="prepaid-expenses">前払費用</option>
+                        <option value="fixed-assets">固定資産</option>
+                        <option value="accumulated-depreciation">減価償却累計額</option>
+                        <option value="equipment">備品</option>
+                        <option value="accounts-payable">買掛金</option>
+                        <option value="notes-payable">支払手形</option>
+                        <option value="loans-payable">借入金</option>
+                        <option value="short-term-loans">短期借入金</option>
+                        <option value="long-term-debt">長期借入金</option>
+                        <option value="advance-receipts">前受金</option>
+                        <option value="accrued-liabilities">未払金</option>
+                        <option value="accrued-expenses">未払費用</option>
+                        <option value="sales">売上</option>
+                        <option value="sales-discount">売上割引</option>
+                        <option value="sales-return">売上戻り</option>
+                        <option value="purchases">仕入</option>
+                        <option value="purchase-discount">仕入割引</option>
+                        <option value="purchase-return">仕入戻し</option>
+                        <option value="wages">給与手当</option>
+                        <option value="employee-benefits">福利厚生費</option>
+                        <option value="advertising">広告宣伝費</option>
+                        <option value="utilities">水道光熱費</option>
+                        <option value="transportation">交通費</option>
+                        <option value="communication">通信費</option>
+                        <option value="travel-expense">旅費交通費</option>
+                        <option value="repairs">修繕費</option>
+                        <option value="depreciation-expense">減価償却費</option>
+                        <option value="taxes">租税公課</option>
+                        <option value="miscellaneous-expenses">雑費</option>
+                        <option value="other-income">雑収入</option>
+                        <option value="interest-receivable">受取利息</option>
+                        <option value="interest-expense">支払利息</option>
+                        <option value="securities">有価証券</option>
+                        <option value="loans-receivable">短期貸付金</option>
+                        <option value="advances">立替金</option>
+                        <option value="accrued-income">未収入金</option>
+                        <option value="consumption-tax-receivable">未収消費税</option>
+                        <option value="consumption-tax-payable">未払消費税</option>
+                        <option value="allowance-for-doubtful-accounts">貸倒引当金</option>
+                        <option value="impairment-loss">評価損</option>
+                        <option value="r&d-expense">研究開発費</option>
+                        <option value="membership-fees">諸会費</option>
+                        <option value="lease-expense">リース料</option>
+                        <option value="insurance-expense">保険料</option>
+                        <option value="entertainment-expense">交際費</option>
+                        <option value="meeting-expense">会議費</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addTAccount()">
+                    <i class="fas fa-plus"></i>
+                    新規T勘定を追加
+                </button>
+            </div>
+            <!-- 検索・フィルター用パネル -->
+            <div class="filter-panel">
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
+                </div>
+                <div class="filter-wrapper">
+                    <select id="filter-select" onchange="filterByAccountType(this.value)">
+                        <option value="">すべての勘定科目</option>
+                        <option value="cash">現金</option>
+                        <option value="bank">当座預金</option>
+                        <option value="accounts-receivable">売掛金</option>
+                        <option value="notes-receivable">受取手形</option>
+                        <option value="inventory">商品</option>
+                        <option value="prepaid-expenses">前払費用</option>
+                        <option value="fixed-assets">固定資産</option>
+                        <option value="accumulated-depreciation">減価償却累計額</option>
+                        <option value="equipment">備品</option>
+                        <option value="accounts-payable">買掛金</option>
+                        <option value="notes-payable">支払手形</option>
+                        <option value="loans-payable">借入金</option>
+                        <option value="short-term-loans">短期借入金</option>
+                        <option value="long-term-debt">長期借入金</option>
+                        <option value="advance-receipts">前受金</option>
+                        <option value="accrued-liabilities">未払金</option>
+                        <option value="accrued-expenses">未払費用</option>
+                        <option value="sales">売上</option>
+                        <option value="sales-discount">売上割引</option>
+                        <option value="sales-return">売上戻り</option>
+                        <option value="purchases">仕入</option>
+                        <option value="purchase-discount">仕入割引</option>
+                        <option value="purchase-return">仕入戻し</option>
+                        <option value="wages">給与手当</option>
+                        <option value="employee-benefits">福利厚生費</option>
+                        <option value="advertising">広告宣伝費</option>
+                        <option value="utilities">水道光熱費</option>
+                        <option value="transportation">交通費</option>
+                        <option value="communication">通信費</option>
+                        <option value="travel-expense">旅費交通費</option>
+                        <option value="repairs">修繕費</option>
+                        <option value="depreciation-expense">減価償却費</option>
+                        <option value="taxes">租税公課</option>
+                        <option value="miscellaneous-expenses">雑費</option>
+                        <option value="other-income">雑収入</option>
+                        <option value="interest-receivable">受取利息</option>
+                        <option value="interest-expense">支払利息</option>
+                        <option value="securities">有価証券</option>
+                        <option value="loans-receivable">短期貸付金</option>
+                        <option value="advances">立替金</option>
+                        <option value="accrued-income">未収入金</option>
+                        <option value="consumption-tax-receivable">未収消費税</option>
+                        <option value="consumption-tax-payable">未払消費税</option>
+                        <option value="allowance-for-doubtful-accounts">貸倒引当金</option>
+                        <option value="impairment-loss">評価損</option>
+                        <option value="r&d-expense">研究開発費</option>
+                        <option value="membership-fees">諸会費</option>
+                        <option value="lease-expense">リース料</option>
+                        <option value="insurance-expense">保険料</option>
+                        <option value="entertainment-expense">交際費</option>
+                        <option value="meeting-expense">会議費</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="t-accounts-container">
+            <div class="empty-state">
+                <i class="fas fa-clipboard-list fa-3x"></i>
+                <p style="margin-top: 1rem">
+                    勘定科目を選択して新規T勘定を追加してください
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function addTAccount() {
+            const select = document.getElementById('account-type');
+            const accountType = select.value;
+            const accountName = select.options[select.selectedIndex].text;
+
+            if (!accountType) {
+                showToast('警告', '勘定科目を選択してください', 'warning');
+                return;
+            }
+
+            const container = document.querySelector('.t-accounts-container');
+            // 空の状態を削除
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            const tAccountHTML = `
+        <div class="t-account fade-in" data-account-type="${accountType}">
+          <div class="t-account-header">
+            <div class="t-account-title">
+              <i class="fas fa-file-invoice-dollar"></i>
+              <span>${accountName}</span>
+            </div>
+            <div class="t-account-actions">
+              <button class="action-btn" onclick="deleteTAccount(this)" title="削除">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="t-account-content">
+            <div class="t-account-side">
+              <div class="t-account-label">
+                <i class="fas fa-arrow-right"></i>
+                借方
+              </div>
+              <textarea class="t-account-textarea"
+                placeholder="借方の記録をここに入力..."
+                oninput="autoSave(this)"></textarea>
+            </div>
+            <div class="t-account-side">
+              <div class="t-account-label">
+                <i class="fas fa-arrow-left"></i>
+                貸方
+              </div>
+              <textarea class="t-account-textarea"
+                placeholder="貸方の記録をここに入力..."
+                oninput="autoSave(this)"></textarea>
+            </div>
+          </div>
+        </div>
+      `;
+
+            container.insertAdjacentHTML('beforeend', tAccountHTML);
+            select.value = '';
+
+            // LocalStorageにも保存（accountTypeも含む）
+            const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
+            const existingIndex = savedAccounts.findIndex(acc => acc.title === accountName);
+            const newTAccountData = {
+                title: accountName,
+                accountType: accountType,
+                debit: '',
+                credit: '',
+                timestamp: new Date().toISOString()
+            };
+
+            if (existingIndex !== -1) {
+                savedAccounts[existingIndex] = newTAccountData;
+            } else {
+                savedAccounts.push(newTAccountData);
+            }
+            localStorage.setItem('tAccounts', JSON.stringify(savedAccounts));
+
+            showToast('成功', '新しいT勘定を追加しました', 'success');
+        }
+
+        function deleteTAccount(button) {
+            const tAccount = button.closest('.t-account');
+            const accountTitle = tAccount.querySelector('.t-account-title span').textContent;
+            const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
+            const newAccounts = savedAccounts.filter(acc => acc.title !== accountTitle);
+            localStorage.setItem('tAccounts', JSON.stringify(newAccounts));
+
+            tAccount.style.opacity = '0';
+            tAccount.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                tAccount.remove();
+                const container = document.querySelector('.t-accounts-container');
+                if (!container.children.length) {
+                    container.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-clipboard-list fa-3x"></i>
+              <p style="margin-top: 1rem;">
+                勘定科目を選択して新規T勘定を追加してください
+              </p>
+            </div>
+          `;
+                }
+                showToast('通知', 'T勘定を削除しました', 'info');
+            }, 300);
+        }
+
+        let saveTimeout;
+        function autoSave(textarea) {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                const tAccount = textarea.closest('.t-account');
+                const accountTitle = tAccount.querySelector('.t-account-title span').textContent;
+                const data = {
+                    title: accountTitle,
+                    debit: tAccount.querySelector('.t-account-side:first-child textarea').value,
+                    credit: tAccount.querySelector('.t-account-side:last-child textarea').value,
+                    timestamp: new Date().toISOString()
+                };
+                // accountTypeも保持
+                data.accountType = tAccount.getAttribute('data-account-type');
+
+                const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
+                const existingIndex = savedAccounts.findIndex(acc => acc.title === accountTitle);
+
+                if (existingIndex !== -1) {
+                    savedAccounts[existingIndex] = data;
+                } else {
+                    savedAccounts.push(data);
+                }
+                localStorage.setItem('tAccounts', JSON.stringify(savedAccounts));
+                showToast('自動保存', '変更を保存しました', 'success');
+            }, 1000);
+        }
+
+        window.addEventListener('load', () => {
+            const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
+            if (savedAccounts.length > 0) {
+                const container = document.querySelector('.t-accounts-container');
+                container.innerHTML = '';
+                savedAccounts.forEach(account => {
+                    const tAccountHTML = `
+            <div class="t-account fade-in" data-account-type="${account.accountType || ''}">
+              <div class="t-account-header">
+                <div class="t-account-title">
+                  <i class="fas fa-file-invoice-dollar"></i>
+                  <span>${account.title}</span>
+                </div>
+                <div class="t-account-actions">
+                  <button class="action-btn" onclick="deleteTAccount(this)" title="削除">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="t-account-content">
+                <div class="t-account-side">
+                  <div class="t-account-label">
+                    <i class="fas fa-arrow-right"></i>
+                    借方
+                  </div>
+                  <textarea class="t-account-textarea" oninput="autoSave(this)">${account.debit || ''}</textarea>
+                </div>
+                <div class="t-account-side">
+                  <div class="t-account-label">
+                    <i class="fas fa-arrow-left"></i>
+                    貸方
+                  </div>
+                  <textarea class="t-account-textarea" oninput="autoSave(this)">${account.credit || ''}</textarea>
+                </div>
+              </div>
+            </div>
+          `;
+                    container.insertAdjacentHTML('beforeend', tAccountHTML);
+                });
+            }
+        });
+
+        // テキスト検索（タイトル部分一致）
+        function searchTAccounts(query) {
+            query = query.toLowerCase();
+            const accounts = document.querySelectorAll('.t-account');
+            accounts.forEach(account => {
+                const title = account.querySelector('.t-account-title span').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    account.style.display = '';
+                } else {
+                    account.style.display = 'none';
+                }
+            });
+        }
+
+        // 勘定科目フィルター：フィルターセレクトの値とdata-account-type属性が一致するもののみ表示
+        function filterByAccountType(filterValue) {
+            const accounts = document.querySelectorAll('.t-account');
+            accounts.forEach(account => {
+                const type = account.getAttribute('data-account-type');
+                if (!filterValue || type === filterValue) {
+                    account.style.display = '';
+                } else {
+                    account.style.display = 'none';
+                }
+            });
+        }
+
+        function showToast(title, message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            let iconClass = 'info-circle';
+            let iconColor = 'var(--primary-color)';
+            switch (type) {
+                case 'success':
+                    iconClass = 'check-circle';
+                    iconColor = 'var(--success-color)';
+                    break;
+                case 'warning':
+                    iconClass = 'exclamation-triangle';
+                    iconColor = '#f59e0b';
+                    break;
+                case 'error':
+                    iconClass = 'times-circle';
+                    iconColor = 'var(--danger-color)';
+                    break;
+            }
+            toast.innerHTML = `
+        <i class="fas fa-${iconClass}" style="color: ${iconColor}"></i>
+        <div>
+          <div style="font-weight: 500">${title}</div>
+          <div style="font-size: 0.875rem; color: var(--text-secondary)">${message}</div>
+        </div>
+      `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
