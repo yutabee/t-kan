@@ -8,19 +8,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary-color: #64748b;
-            --accent-color: #eef2ff;
-            --danger-color: #ef4444;
-            --success-color: #22c55e;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            /* モノトーン配色 */
+            --primary-color: #333333;
+            /* メインテキスト・ボタン背景 */
+            --primary-hover: #111111;
+            --secondary-color: #666666;
+            /* 補助テキスト */
+            --accent-color: #f2f2f2;
+            /* フォーカス時の背景など */
+            --danger-color: #c0392b;
+            --success-color: #555555;
+            /* 成功通知なども落ち着いたグレー */
+            --background-color: #ffffff;
+            --card-background: #f9f9f9;
+            --text-primary: #333333;
+            --text-secondary: #777777;
+            --border-color: #dddddd;
+            --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
         }
@@ -41,7 +45,7 @@
         }
 
         .app-container {
-            max-width: 1440px;
+            max-width: 960px;
             margin: 0 auto;
             padding: 1.5rem;
         }
@@ -67,7 +71,7 @@
             color: var(--text-primary);
         }
 
-        /* 新規追加用パネル：フリー入力 */
+        /* 新規追加用パネル（フリー入力） */
         .new-account-panel {
             display: flex;
             gap: 1rem;
@@ -81,7 +85,7 @@
             padding: 0.75rem 1rem;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            background-color: var(--card-background);
+            background-color: var(--background-color);
             color: var(--text-primary);
             font-size: 0.875rem;
             transition: all 0.2s ease;
@@ -107,7 +111,7 @@
             padding: 0.75rem 1rem;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            background-color: var(--card-background);
+            background-color: var(--background-color);
             color: var(--text-primary);
             font-size: 0.875rem;
             transition: all 0.2s ease;
@@ -134,7 +138,7 @@
 
         .btn-primary {
             background-color: var(--primary-color);
-            color: white;
+            color: #ffffff;
         }
 
         .btn-primary:hover {
@@ -162,7 +166,7 @@
 
         .t-account:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 12px -1px rgb(0 0 0 / 0.1);
+            box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.1);
         }
 
         .t-account-header {
@@ -237,7 +241,7 @@
             font-size: 0.875rem;
             line-height: 1.6;
             color: var(--text-primary);
-            background-color: var(--card-background);
+            background-color: var(--background-color);
             transition: all 0.2s ease;
         }
 
@@ -274,7 +278,6 @@
             }
         }
 
-        /* アニメーション */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -291,7 +294,6 @@
             animation: fadeIn 0.3s ease forwards;
         }
 
-        /* トースト通知 */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -328,14 +330,14 @@
                 <i class="fas fa-book-open"></i>
                 <h1>T-KAN</h1>
             </div>
-            <!-- 新規T勘定作成用パネル（フリー入力） -->
+            <!-- 新規追加パネル（フリー入力） -->
             <div class="new-account-panel">
                 <input type="text" id="account-input" placeholder="勘定科目を入力してください" />
                 <button class="btn btn-primary" onclick="addTAccount()">
                     <i class="fas fa-plus"></i> 新規追加
                 </button>
             </div>
-            <!-- 検索用パネル -->
+            <!-- 検索パネル -->
             <div class="filter-panel">
                 <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
             </div>
@@ -344,15 +346,12 @@
         <main class="t-accounts-container">
             <div class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
-                <p style="margin-top: 1rem">
-                    勘定科目を入力して新規T勘定を追加してください
-                </p>
+                <p style="margin-top: 1rem;">勘定科目を入力して新規T勘定を追加してください</p>
             </div>
         </main>
     </div>
 
     <script>
-        // 新規T勘定追加（フリー入力の値を使用）
         function addTAccount() {
             const input = document.getElementById('account-input');
             const accountSubject = input.value.trim();
@@ -361,7 +360,6 @@
                 return;
             }
             const container = document.querySelector('.t-accounts-container');
-            // 空の状態を削除
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) {
                 emptyState.remove();
@@ -396,11 +394,8 @@
         </div>
       `;
             container.insertAdjacentHTML('beforeend', tAccountHTML);
-            // 入力欄をクリア
             input.value = '';
-            // LocalStorageにも保存（勘定科目は accountSubject として保存）
             const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
-            // ここではタイトルで重複チェック（必要に応じて変更可）
             const existingIndex = savedAccounts.findIndex(acc => acc.title === accountSubject);
             const newTAccountData = {
                 title: accountSubject,
@@ -453,7 +448,6 @@
                     credit: tAccount.querySelector('.t-account-side:last-child textarea').value,
                     timestamp: new Date().toISOString()
                 };
-                // 勘定科目は data-account-type 属性から取得
                 data.accountType = tAccount.getAttribute('data-account-type');
                 const savedAccounts = JSON.parse(localStorage.getItem('tAccounts') || '[]');
                 const existingIndex = savedAccounts.findIndex(acc => acc.title === accountTitle);
@@ -507,7 +501,6 @@
             }
         });
 
-        // テキスト検索：タイトルの部分一致
         function searchTAccounts(query) {
             query = query.toLowerCase();
             const accounts = document.querySelectorAll('.t-account');
