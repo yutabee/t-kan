@@ -3,22 +3,19 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 最大/最小スケールを1.0に固定してズームを抑制 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>T勘定メモアプリ | Professional</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
         :root {
             /* モノトーン配色 */
             --primary-color: #333333;
-            /* メインテキスト・ボタン背景 */
             --primary-hover: #111111;
             --secondary-color: #666666;
-            /* 補助テキスト */
             --accent-color: #f2f2f2;
-            /* フォーカス時の背景など */
             --danger-color: #c0392b;
             --success-color: #555555;
-            /* 成功通知なども落ち着いたグレー */
             --background-color: #ffffff;
             --card-background: #f9f9f9;
             --text-primary: #333333;
@@ -36,14 +33,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--background-color);
             color: var(--text-primary);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* 画面幅を固定してズレを防止 */
         .app-container {
             max-width: 960px;
             margin: 0 auto;
@@ -87,7 +84,8 @@
             border: 1px solid var(--border-color);
             background-color: var(--background-color);
             color: var(--text-primary);
-            font-size: 0.875rem;
+            /* モバイルズームを防ぐためフォントサイズ16px */
+            font-size: 16px;
             transition: all 0.2s ease;
         }
 
@@ -113,7 +111,7 @@
             border: 1px solid var(--border-color);
             background-color: var(--background-color);
             color: var(--text-primary);
-            font-size: 0.875rem;
+            font-size: 16px;
             transition: all 0.2s ease;
         }
 
@@ -130,7 +128,7 @@
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: var(--radius-md);
-            font-size: 0.875rem;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -238,7 +236,7 @@
             border-radius: var(--radius-md);
             resize: none;
             padding: 0.75rem;
-            font-size: 0.875rem;
+            font-size: 16px;
             line-height: 1.6;
             color: var(--text-primary);
             background-color: var(--background-color);
@@ -269,7 +267,8 @@
 
             .new-account-panel input,
             .filter-panel input {
-                width: 100%;
+                width: 90%;
+                max-width: 300px;
             }
 
             .btn {
@@ -342,7 +341,6 @@
                 <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
             </div>
         </header>
-
         <main class="t-accounts-container">
             <div class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
@@ -350,7 +348,6 @@
             </div>
         </main>
     </div>
-
     <script>
         function addTAccount() {
             const input = document.getElementById('account-input');
@@ -506,11 +503,7 @@
             const accounts = document.querySelectorAll('.t-account');
             accounts.forEach(account => {
                 const title = account.querySelector('.t-account-title span').textContent.toLowerCase();
-                if (title.includes(query)) {
-                    account.style.display = '';
-                } else {
-                    account.style.display = 'none';
-                }
+                account.style.display = title.includes(query) ? '' : 'none';
             });
         }
 
