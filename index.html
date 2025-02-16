@@ -3,27 +3,31 @@
 
 <head>
     <meta charset="UTF-8" />
-    <!-- 最大/最小スケールを1.0に固定してズームを抑制 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>T勘定メモアプリ | Professional</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
         :root {
-            /* モノトーン配色 */
-            --primary-color: #333333;
-            --primary-hover: #111111;
-            --secondary-color: #666666;
-            --accent-color: #f2f2f2;
-            --danger-color: #c0392b;
-            --success-color: #555555;
-            --background-color: #ffffff;
-            --card-background: #f9f9f9;
-            --text-primary: #333333;
-            --text-secondary: #777777;
-            --border-color: #dddddd;
-            --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --primary-color: #2c3e50;
+            --primary-hover: #34495e;
+            --secondary-color: #7f8c8d;
+            --accent-color: #f8f9fa;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+            --background-color: #f4f6f8;
+            --card-background: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #95a5a6;
+            --border-color: #ecf0f1;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.03);
+            --radius-sm: 0.375rem;
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
+            --header-height: 4rem;
+            --max-width-content: 1200px;
+            --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -40,85 +44,71 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 画面幅を固定してズレを防止 */
         .app-container {
-            max-width: 960px;
+            max-width: var(--max-width-content);
             margin: 0 auto;
             padding: 1.5rem;
         }
 
         .header {
             background-color: var(--card-background);
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-lg);
             margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
         }
 
         .header-title {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .header-title h1 {
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--text-primary);
+            letter-spacing: -0.025em;
         }
 
-        /* 新規追加用パネル（フリー入力） */
-        .new-account-panel {
-            display: flex;
+        .header-controls {
+            display: grid;
+            grid-template-columns: 1fr auto;
             gap: 1rem;
-            align-items: center;
-            margin-bottom: 1rem;
+            align-items: start;
         }
 
-        .new-account-panel input {
+        .input-group {
+            position: relative;
             flex: 1;
-            min-width: 200px;
-            padding: 0.75rem 1rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            background-color: var(--background-color);
+            background-color: var(--card-background);
             color: var(--text-primary);
-            /* モバイルズームを防ぐためフォントサイズ16px */
-            font-size: 16px;
-            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            transition: var(--transition-base);
         }
 
-        .new-account-panel input:focus {
+        .input-control:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
-        }
-
-        /* 検索用パネル */
-        .filter-panel {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .filter-panel input {
-            flex: 1;
-            min-width: 200px;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            font-size: 16px;
-            transition: all 0.2s ease;
-        }
-
-        .filter-panel input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
         }
 
         .btn {
@@ -128,10 +118,10 @@
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: var(--radius-md);
-            font-size: 16px;
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-base);
         }
 
         .btn-primary {
@@ -141,15 +131,12 @@
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
-        }
-
-        .btn i {
-            font-size: 1rem;
+            transform: translateY(-1px);
         }
 
         .t-accounts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
@@ -159,19 +146,20 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
             overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-base);
         }
 
         .t-account:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .t-account-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.25rem;
             background-color: var(--accent-color);
             border-bottom: 1px solid var(--border-color);
         }
@@ -180,38 +168,18 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 1rem;
+            font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .t-account-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            padding: 0.5rem;
-            border: none;
-            border-radius: var(--radius-md);
-            background: transparent;
-            color: var(--secondary-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-            color: var(--text-primary);
-        }
-
         .t-account-content {
-            display: flex;
-            min-height: 250px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 200px;
         }
 
         .t-account-side {
-            flex: 1;
             padding: 1rem;
             border-right: 1px solid var(--border-color);
         }
@@ -224,56 +192,104 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            color: var(--secondary-color);
+            color: var(--text-secondary);
             margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .t-account-textarea {
             width: 100%;
-            height: 200px;
+            height: 150px;
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             resize: none;
             padding: 0.75rem;
-            font-size: 16px;
+            font-size: 0.875rem;
             line-height: 1.6;
             color: var(--text-primary);
-            background-color: var(--background-color);
-            transition: all 0.2s ease;
+            background-color: var(--card-background);
+            transition: var(--transition-base);
         }
 
         .t-account-textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--danger-color);
         }
 
         .empty-state {
             text-align: center;
             padding: 3rem;
             color: var(--text-secondary);
+            background-color: var(--card-background);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .empty-state i {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background-color: var(--card-background);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            font-size: 0.875rem;
         }
 
         @media (max-width: 768px) {
+            .header-controls {
+                grid-template-columns: 1fr;
+            }
+
             .t-accounts-container {
                 grid-template-columns: 1fr;
             }
 
-            .new-account-panel,
-            .filter-panel {
-                flex-direction: column;
+            .t-account-content {
+                grid-template-columns: 1fr;
             }
 
-            .new-account-panel input,
-            .filter-panel input {
-                width: 90%;
-                max-width: 300px;
+            .t-account-side {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
             }
 
-            .btn {
-                width: 100%;
-                justify-content: center;
+            .t-account-side:last-child {
+                border-bottom: none;
             }
         }
 
@@ -291,21 +307,6 @@
 
         .fade-in {
             animation: fadeIn 0.3s ease forwards;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            background-color: var(--card-background);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 1000;
-            animation: slideIn 0.3s ease forwards;
         }
 
         @keyframes slideIn {
@@ -329,26 +330,30 @@
                 <i class="fas fa-book-open"></i>
                 <h1>T-KAN</h1>
             </div>
-            <!-- 新規追加パネル（フリー入力） -->
-            <div class="new-account-panel">
-                <input type="text" id="account-input" placeholder="勘定科目を入力してください" />
-                <button class="btn btn-primary" onclick="addTAccount()">
-                    <i class="fas fa-plus"></i> 新規追加
-                </button>
-            </div>
-            <!-- 検索パネル -->
-            <div class="filter-panel">
-                <input type="text" id="search-input" placeholder="検索..." oninput="searchTAccounts(this.value)" />
+            <div class="header-controls">
+                <div class="input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" class="input-control" placeholder="勘定科目を検索..."
+                        oninput="searchTAccounts(this.value)" />
+                </div>
+                <div class="input-group" style="display: flex; gap: 1rem;">
+                    <input type="text" id="account-input" class="input-control" placeholder="新規勘定科目を入力" />
+                    <button class="btn btn-primary" onclick="addTAccount()">
+                        <i class="fas fa-plus"></i>
+                        追加
+                    </button>
+                </div>
             </div>
         </header>
         <main class="t-accounts-container">
             <div class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
-                <p style="margin-top: 1rem;">勘定科目を入力して新規T勘定を追加してください</p>
+                <p>勘定科目を入力して新規T勘定を追加してください</p>
             </div>
         </main>
     </div>
     <script>
+        // 既存のJavaScriptコードをそのまま使用
         function addTAccount() {
             const input = document.getElementById('account-input');
             const accountSubject = input.value.trim();
@@ -425,7 +430,7 @@
                     container.innerHTML = `
             <div class="empty-state">
               <i class="fas fa-clipboard-list fa-3x"></i>
-              <p style="margin-top: 1rem;">勘定科目を入力して新規T勘定を追加してください</p>
+              <p>勘定科目を入力して新規T勘定を追加してください</p>
             </div>
           `;
                 }
